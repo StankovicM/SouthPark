@@ -17,6 +17,10 @@ public class World {
     public int sections;
     public int section = 0;
 
+    public double groundLevel = 660.0;
+
+    public double gravity = 0.95;
+
     public World() {  }
 
     public boolean load() {

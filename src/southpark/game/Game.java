@@ -7,11 +7,13 @@ import java.awt.event.KeyEvent;
 
 import southpark.game.elements.player.Player;
 import southpark.game.elements.world.World;
+import southpark.game.gui.GUI;
 
 import static southpark.game.utils.Constants.*;
 
 public class Game extends GameFrame {
 
+    public GUI gui;
     public World world;
     private Player player;
 
@@ -19,11 +21,15 @@ public class Game extends GameFrame {
 
     public boolean ready = true;
 
+    public boolean running = false;
+
     public Game(String title, int sizeX, int sizeY) {
         super(title, sizeX, sizeY);
     }
 
     public void init() {
+
+        gui = new GUI(this);
 
         world = new World();
         ready = world.load();
@@ -39,6 +45,7 @@ public class Game extends GameFrame {
     public void startGame() {
 
         if (ready) {
+            running = true;
             startThread();
         } else {
             System.err.println("Game failed to start!");
@@ -52,15 +59,9 @@ public class Game extends GameFrame {
         if (!paused) {
             g.drawImage(world.getCurrentImage(), 0, 0, null);
 
-            if (player.facing == Player.Facing.LEFT) {
-                g.drawImage(player.image_left, player.playerTransform, null);
-            } else if (player.facing == Player.Facing.RIGHT){
-                g.drawImage(player.image_right, player.playerTransform, null);
-            } else {
-                g.drawImage(player.image_front, player.playerTransform, null);
-            }
+            player.render(g);
         } else {
-
+            gui.draw(g);
         }
 
     }
@@ -70,15 +71,16 @@ public class Game extends GameFrame {
 
         if (!paused) {
             player.facing = Player.Facing.NONE;
-            if (isKeyDown(KeyEvent.VK_A)) {
+            if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
                 player.moveLeft();
             }
-            if (isKeyDown(KeyEvent.VK_D)) {
+            if (isKeyDown(KeyEvent.VK_D) && !player.heroAnim) {
                 player.moveRight();
             }
 
             if (player.facing == Player.Facing.NONE) {
                 player.angle = -Math.PI / 2.0;
+                player.idle();
             }
 
             player.playerTransform.setToIdentity();
@@ -118,6 +120,21 @@ public class Game extends GameFrame {
 
     @Override
     public void handleKeyDown(int keyCode) {
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+            paused = paused == true ? false : true;
+
+        if (!paused && !player.heroAnim) {
+            if (keyCode == KeyEvent.VK_SPACE && !player.inJump) {
+                player.jumpDir = player.facing;
+                player.inJump = true;
+                player.angle = -Math.PI / 2;
+            }
+
+            if (keyCode == KeyEvent.VK_H) {
+                player.toggleHeroMode();
+            }
+        }
 
     }
 
