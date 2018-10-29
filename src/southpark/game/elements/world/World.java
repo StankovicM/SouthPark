@@ -1,45 +1,54 @@
 package southpark.game.elements.world;
 
-import rafgfxlib.Util;
-
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import static southpark.game.utils.Constants.*;
 
 public class World {
 
-    public BufferedImage image;
+    private static final String TOWN_01_PATH = "src/southpark/game/assets/town.png";
+    private static final String SCHOOL_PATH = "src/southpark/game/assets/school.png";
 
-    public int width;
-    public int height;
+    private Map town_01;
+    private Map school;
 
-    public int sections;
+    public Map currentMap;
+
+    private HashMap<String, Map> maps = new HashMap<>();
+
     public int section = 0;
 
     public double groundLevel = 660.0;
-
-    public double gravity = 0.95;
 
     public World() {  }
 
     public boolean load() {
 
-        image = Util.loadImage(WORLD_PATH);
-        if (image == null) return false;
+        town_01 = new Map(TOWN_01_PATH);
+        if (!town_01.load()) return false;
+        maps.put("town_01", town_01);
 
-        width = image.getWidth();
-        height = image.getHeight();
+        school = new Map(SCHOOL_PATH);
+        if(!school.load()) return false;
+        maps.put("school", school);
 
-        sections = width / SCR_W;
+        currentMap = town_01;
 
         return true;
 
     }
 
+    public void switchMap(String mapId) {
+
+        currentMap = maps.get(mapId);
+        section = 0;
+
+    }
+
     public Image getCurrentImage() {
 
-        return image.getSubimage(section * SCR_W, 0, SCR_W, SCR_H);
+        return currentMap.image.getSubimage(section * APP_W, 0, APP_W, APP_H);
 
     }
 

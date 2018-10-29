@@ -2,7 +2,6 @@ package southpark.game.elements.player;
 
 import rafgfxlib.Util;
 import southpark.game.Game;
-import southpark.game.elements.world.World;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -56,10 +55,13 @@ public class Player {
     public boolean heroMode = false;
     public boolean heroAnim = false;
 
-    private static final long ANIM_TIME = 5000000000l;
+    private static final long ANIM_TIME = 5500000000l;
     private long lastTime = System.nanoTime();
     private long now;
     private long time = 0;
+
+    public double flightHeight = 370.0;
+    public boolean inFlight = false;
 
     public Player(Game game) { this(game,50); }
 
@@ -84,11 +86,43 @@ public class Player {
             now = System.nanoTime();
             time += now - lastTime;
             if (time >= ANIM_TIME) {
+                game.genParticles(xPos, yPos, 10.0, 70, 100);
                 heroAnim = false;
                 time = 0;
             }
 
-            //TODO hero animacija
+            if (time >= 1500000000l && time <= 2000000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
+
+            if (time >= 2500000000l && time <= 3000000000l)
+                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
+
+            if (time >= 3500000000l && time <= 4000000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
+
+            if (time >= 4250000000l && time <= 4500000000l)
+                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
+
+            if (time >= 4500000000l && time <= 4750000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
+
+            if (time >= 4750000000l && time <= 5000000000l)
+                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
+
+            if (time >= 5000000000l && time <= 5100000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
+
+            if (time >= 5100000000l && time <= 5200000000l)
+                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
+
+            if (time >= 5200000000l && time <= 5300000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
+
+            if (time >= 5300000000l && time <= 5400000000l)
+                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
+
+            if (time >= 5400000000l)
+                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
 
             lastTime = now;
         }
@@ -134,7 +168,7 @@ public class Player {
         } else {
             if (xPos < 0) {
                 --game.world.section;
-                xPos = SCR_W - width / 2;
+                xPos = APP_W - width / 2;
             }
         }
 
@@ -171,12 +205,12 @@ public class Player {
         else
             image = hero_right;
 
-        if (game.world.section == game.world.sections - 1) {
-            if (xPos + width / 2 > SCR_W) {
-                xPos = SCR_W - width / 2;
+        if (game.world.section == game.world.currentMap.sections - 1) {
+            if (xPos + width / 2 > APP_W) {
+                xPos = APP_W - width / 2;
             }
         } else {
-            if (xPos > SCR_W) {
+            if (xPos > APP_W) {
                 ++game.world.section;
                 xPos = width / 2;
             }
@@ -186,13 +220,15 @@ public class Player {
 
     public void idle() {
 
+        if (inJump) {
+            jump();
+            return;
+        }
+
         if (!heroMode)
             image = image_front;
         else
             image = hero_front;
-
-        if (inJump)
-            jump();
 
     }
 
@@ -202,12 +238,12 @@ public class Player {
         if (jumpDir == Facing.RIGHT) {
             xPos += curSpeed;
 
-            if (game.world.section == game.world.sections - 1) {
-                if (xPos + width / 2 > SCR_W) {
-                    xPos = SCR_W - width / 2;
+            if (game.world.section == game.world.currentMap.sections - 1) {
+                if (xPos + width / 2 > APP_W) {
+                    xPos = APP_W - width / 2;
                 }
             } else {
-                if (xPos > SCR_W) {
+                if (xPos > APP_W) {
                     ++game.world.section;
                     xPos = width / 2;
                 }
@@ -222,7 +258,7 @@ public class Player {
             } else {
                 if (xPos < 0) {
                     --game.world.section;
-                    xPos = SCR_W - width / 2;
+                    xPos = APP_W - width / 2;
                 }
             }
         }
@@ -241,6 +277,14 @@ public class Player {
                 curSpeed = jumpSpeed;
             }
         }
+
+    }
+
+    public void fly() {
+
+        if (inJump) return;
+
+        //TODO fly
 
     }
 

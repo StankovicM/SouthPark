@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Game game = new Game("South Park", SCR_W, SCR_H);
+        Game game = new Game("South Park", APP_W, APP_H);
         game.init();
         game.startGame();
 
