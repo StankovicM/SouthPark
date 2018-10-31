@@ -2,6 +2,7 @@ package southpark.game.elements.player;
 
 import rafgfxlib.Util;
 import southpark.game.Game;
+import southpark.game.elements.GObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -50,7 +51,6 @@ public class Player {
     public boolean inJump = false;
 
     private boolean up = true;
-    private boolean upJump = true;
 
     public boolean heroMode = false;
     public boolean heroAnim = false;
@@ -61,7 +61,14 @@ public class Player {
     private long time = 0;
 
     public double flightHeight = 370.0;
+    public double flightSpeed = 4.0;
+    public double flightAngle = 0.8;
+    public double flightRotation = 0.02;
     public boolean inFlight = false;
+
+    public boolean falling = false;
+
+    public Color partCol = Color.YELLOW;
 
     public Player(Game game) { this(game,50); }
 
@@ -86,7 +93,12 @@ public class Player {
             now = System.nanoTime();
             time += now - lastTime;
             if (time >= ANIM_TIME) {
-                game.genParticles(xPos, yPos, 10.0, 70, 100);
+                game.genParticles(xPos, yPos, 10.0, 60, 100);
+                if (heroMode)
+                    partCol = new Color(130, 2, 104);
+                else
+                    partCol = Color.YELLOW;
+
                 heroAnim = false;
                 time = 0;
             }
@@ -142,16 +154,22 @@ public class Player {
             up = true;
         }
 
-        if (up) {
-            angle = angle + rotationSpeed;
-            if (angle >= -Math.PI / 2.0 + rotationDist) {
-                up = false;
+        if (!inFlight) {
+            if (up) {
+                angle = angle + rotationSpeed;
+                if (angle >= -Math.PI / 2.0 + rotationDist) {
+                    up = false;
+                }
+            } else {
+                angle = angle - rotationSpeed;
+                if (angle <= -Math.PI / 2.0) {
+                    up = true;
+                }
             }
         } else {
-            angle = angle - rotationSpeed;
-            if (angle <= -Math.PI / 2.0) {
-                up = true;
-            }
+            angle = angle - flightRotation;
+            if (angle <= -Math.PI / 2.0 - flightAngle)
+                angle = -Math.PI / 2.0 - flightAngle;
         }
 
         facing = Facing.LEFT;
@@ -187,16 +205,22 @@ public class Player {
             up = true;
         }
 
-        if (up) {
-            angle -= rotationSpeed;
-            if (angle <= -Math.PI / 2.0 - rotationDist) {
-                up = false;
+        if (!inFlight) {
+            if (up) {
+                angle -= rotationSpeed;
+                if (angle <= -Math.PI / 2.0 - rotationDist) {
+                    up = false;
+                }
+            } else {
+                angle += rotationSpeed;
+                if (angle >= -Math.PI / 2.0) {
+                    up = true;
+                }
             }
         } else {
-            angle += rotationSpeed;
-            if (angle >= -Math.PI / 2.0) {
-                up = true;
-            }
+            angle += flightRotation;
+            if (angle >= -Math.PI / 2.0 + flightAngle)
+                angle = -Math.PI / 2.0 + flightAngle;
         }
 
         facing = Facing.RIGHT;
@@ -263,28 +287,41 @@ public class Player {
             }
         }
 
-        if (upJump) {
-            yPos -= curSpeed;
-            curSpeed *= 0.97;
-            if (yPos <= jumpHeight)
-                upJump = false;
-        } else {
-            yPos += curSpeed;
-            curSpeed *= 1.04;
-            if (yPos >= game.world.groundLevel - height / 2) {
-                upJump = true;
-                inJump = false;
-                curSpeed = jumpSpeed;
-            }
+        yPos -= curSpeed;
+        curSpeed *= 0.97;
+        if (yPos <= jumpHeight) {
+            inJump = false;
+            falling = true;
+            curSpeed = 1.0;
         }
-
     }
 
     public void fly() {
 
         if (inJump) return;
 
+        yPos -= flightSpeed;
+        if (yPos <= flightHeight) {
+            yPos = flightHeight;
+        }
+
+        curSpeed = 1.0;
+
         //TODO fly
+
+    }
+
+    public void pullDown() {
+
+        if (yPos < game.world.groundLevel - height / 2) {
+            yPos += curSpeed;
+            curSpeed *= game.world.gravity;
+            if (yPos >= game.world.groundLevel - height / 2) {
+                curSpeed = jumpSpeed;
+                falling = false;
+                yPos = game.world.groundLevel - height / 2;
+            }
+        }
 
     }
 

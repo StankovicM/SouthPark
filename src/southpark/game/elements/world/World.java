@@ -21,6 +21,8 @@ public class World {
 
     public double groundLevel = 660.0;
 
+    public double gravity = 1.17;
+
     public World() {  }
 
     public boolean load() {

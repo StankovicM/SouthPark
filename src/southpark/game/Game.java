@@ -4,7 +4,11 @@ import rafgfxlib.GameFrame;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import rafgfxlib.Util;
+import southpark.game.elements.GObject;
 import southpark.game.elements.particle.Particle;
 import southpark.game.elements.player.Player;
 import southpark.game.elements.vehicle.Bus;
@@ -21,9 +25,17 @@ public class Game extends GameFrame {
     public Bus bus;
     private Particle[] particles = new Particle[MAX_PARTICLES];
 
-    private boolean paused = false;
+    public ArrayList<GObject> objects = new ArrayList<>();
+
+    public BufferedImage crosshair;
+    public int crosshairX = APP_W / 2;
+    public int crosshairY = APP_H / 2;
+    public int crosshairSize;
+
+    public boolean paused = false;
     public boolean ready = true;
     public boolean running = false;
+    public boolean drawCrosshair = false;
 
     public Game(String title, int sizeX, int sizeY) {
         super(title, sizeX, sizeY);
@@ -41,6 +53,10 @@ public class Game extends GameFrame {
 
         bus = new Bus(this);
         ready = bus.load();
+
+        crosshair = Util.loadImage("src/southpark/game/assets/crosshair.png");
+        if (crosshair == null) ready = false;
+        crosshairSize = crosshair.getWidth();
 
         for (int i = 0; i < MAX_PARTICLES; ++i)
             particles[i] = new Particle();
@@ -72,11 +88,16 @@ public class Game extends GameFrame {
 
             bus.render();
 
-            g.setColor(Color.YELLOW);
+            g.setColor(player.partCol);
             for(Particle p : particles) {
                 if(p.life <= 0) continue;
 
                 p.render(g);
+            }
+
+            if (drawCrosshair) {
+                g.setColor(Color.YELLOW);
+                g.drawImage(crosshair, crosshairX - crosshairSize / 2, crosshairY - crosshairSize / 2, null);
             }
         } else {
             gui.draw(g);
@@ -96,14 +117,23 @@ public class Game extends GameFrame {
                 player.moveRight();
             }
 
-            if (player.heroMode && isKeyDown(KeyEvent.VK_F)) {
+            player.inFlight = false;
+            if (player.heroMode && !player.heroAnim && isKeyDown(KeyEvent.VK_F)) {
+                player.inFlight = true;
                 player.fly();
             }
+
+            if (!player.inJump && !player.inFlight)
+               player.pullDown();
 
             if (player.facing == Player.Facing.NONE) {
                 player.angle = -Math.PI / 2.0;
                 player.idle();
             }
+
+            //for (GObject o : objects)
+            //    if (o.isFalling())
+            //        o.pullDown();
 
             player.playerTransform.setToIdentity();
             player.playerTransform.translate(player.xPos , player.yPos);
@@ -153,6 +183,9 @@ public class Game extends GameFrame {
     @Override
     public void handleMouseDown(int x, int y, GFMouseButton button) {
 
+        if (button == GFMouseButton.Right)
+            drawCrosshair = drawCrosshair ? false : true;
+
     }
 
     @Override
@@ -163,6 +196,9 @@ public class Game extends GameFrame {
     @Override
     public void handleMouseMove(int x, int y) {
 
+        crosshairX = x;
+        crosshairY = y;
+
     }
 
     @Override
@@ -171,7 +207,7 @@ public class Game extends GameFrame {
         if (keyCode == KeyEvent.VK_ESCAPE)
             paused = paused == true ? false : true;
 
-        if (!paused && !player.heroAnim && !player.inJump && !player.inFlight) {
+        if (!paused && !player.heroAnim && !player.inJump && !player.inFlight && !player.falling) {
             if (keyCode == KeyEvent.VK_SPACE) {
                 player.jumpDir = player.facing;
                 player.inJump = true;
@@ -180,6 +216,11 @@ public class Game extends GameFrame {
 
             if (keyCode == KeyEvent.VK_H) {
                 player.toggleHeroMode();
+                genParticles(player.xPos, player.yPos, 10.0, 60, 100);
+                if (!player.heroMode)
+                    player.partCol = new Color(130, 2, 104);
+                else
+                    player.partCol = Color.YELLOW;
             }
         }
 
