@@ -17,7 +17,14 @@ public class Map {
 
     public int sections;
 
-    public Map(String path) { this.path = path; }
+    public double groundLevel;
+
+    public Map(String path, double groundLevel) {
+
+        this.path = path;
+        this.groundLevel = groundLevel;
+
+    }
 
     public boolean load() {
 

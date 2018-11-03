@@ -26,13 +26,13 @@ public abstract class GObject {
 
     public void pullDown() {
 
-        if (yPos < game.world.groundLevel - height / 2) {
+        if (yPos < game.world.currentMap.groundLevel - height / 2) {
             yPos += curSpeed;
             curSpeed *= game.world.gravity;
-            if (yPos >= game.world.groundLevel - height / 2) {
+            if (yPos >= game.world.currentMap.groundLevel - height / 2) {
                 curSpeed = fallSpeed;
                 falling = false;
-                yPos = game.world.groundLevel - height / 2;
+                yPos = game.world.currentMap.groundLevel - height / 2;
             }
         }
 

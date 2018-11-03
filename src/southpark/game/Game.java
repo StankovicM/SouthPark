@@ -21,7 +21,7 @@ public class Game extends GameFrame {
 
     public GUI gui;
     public World world;
-    private Player player;
+    public Player player;
     public Bus bus;
     private Particle[] particles = new Particle[MAX_PARTICLES];
 
@@ -32,7 +32,7 @@ public class Game extends GameFrame {
     public int crosshairY = APP_H / 2;
     public int crosshairSize;
 
-    public boolean paused = false;
+    public boolean paused = false; //TODO postaviti na true na kraju, da bi se prvo otvorio meni
     public boolean ready = true;
     public boolean running = false;
     public boolean drawCrosshair = false;
@@ -70,7 +70,7 @@ public class Game extends GameFrame {
     public void startGame() {
 
         if (ready) {
-            running = true;
+            running = true; //TODO ukloniti kada se paused postavi na true
             startThread();
         } else {
             System.err.println("Game failed to start!");
@@ -138,7 +138,9 @@ public class Game extends GameFrame {
             player.playerTransform.setToIdentity();
             player.playerTransform.translate(player.xPos , player.yPos);
             player.playerTransform.rotate(player.angle + Math.PI / 2.0);
-            player.playerTransform.translate(-player.width / 2, -player.height / 2);
+            player.playerTransform.translate(-player.character.width / 2, -player.character.height / 2);
+
+            player.character.update();
 
             for (Particle p : particles) {
                 if (p.life <= 0) continue;
@@ -204,7 +206,7 @@ public class Game extends GameFrame {
     @Override
     public void handleKeyDown(int keyCode) {
 
-        if (keyCode == KeyEvent.VK_ESCAPE)
+        if (keyCode == KeyEvent.VK_ESCAPE && running)
             paused = paused == true ? false : true;
 
         if (!paused && !player.heroAnim && !player.inJump && !player.inFlight && !player.falling) {

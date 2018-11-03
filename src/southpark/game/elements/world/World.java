@@ -19,19 +19,17 @@ public class World {
 
     public int section = 0;
 
-    public double groundLevel = 660.0;
-
     public double gravity = 1.17;
 
     public World() {  }
 
     public boolean load() {
 
-        town_01 = new Map(TOWN_01_PATH);
+        town_01 = new Map(TOWN_01_PATH, 660.0);
         if (!town_01.load()) return false;
         maps.put("town_01", town_01);
 
-        school = new Map(SCHOOL_PATH);
+        school = new Map(SCHOOL_PATH, 700.0);
         if(!school.load()) return false;
         maps.put("school", school);
 

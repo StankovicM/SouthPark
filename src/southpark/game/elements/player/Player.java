@@ -27,6 +27,7 @@ public class Player {
     public static BufferedImage hero_right;
     public BufferedImage image;
 
+    public Character character;
     public AffineTransform playerTransform;
 
     public int width;
@@ -46,7 +47,7 @@ public class Player {
 
     public Facing facing = Facing.NONE;
 
-    public double jumpHeight = 570.0;
+    public double jumpHeight = 550.0;
     public Facing jumpDir = Facing.NONE;
     public boolean inJump = false;
 
@@ -81,14 +82,10 @@ public class Player {
 
     public void render(Graphics2D g) {
 
-        if (!heroAnim) {
-            if (facing == Player.Facing.LEFT) {
-                g.drawImage(image, playerTransform, null);
-            } else if (facing == Player.Facing.RIGHT) {
-                g.drawImage(image, playerTransform, null);
-            } else {
-                g.drawImage(image, playerTransform, null);
-            }
+        character.render(g);
+
+        /*if (!heroAnim) {
+            g.drawImage(image, playerTransform, null);
         } else {
             now = System.nanoTime();
             time += now - lastTime;
@@ -137,7 +134,7 @@ public class Player {
                 g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
 
             lastTime = now;
-        }
+        }*/
 
     }
 
@@ -173,20 +170,20 @@ public class Player {
         }
 
         facing = Facing.LEFT;
-
-        if (!heroMode)
+        character.setLeft();
+        /*if (!heroMode)
             image = image_left;
         else
-            image = hero_left;
+            image = hero_left;*/
 
         if (game.world.section == 0) {
-            if (xPos - width / 2 < 0) {
-                xPos = width / 2;
+            if (xPos - character.width / 2 < 0) {   //character
+                xPos = character.width / 2;         //character
             }
         } else {
             if (xPos < 0) {
                 --game.world.section;
-                xPos = APP_W - width / 2;
+                xPos = APP_W - character.width / 2; //character
             }
         }
 
@@ -224,19 +221,20 @@ public class Player {
         }
 
         facing = Facing.RIGHT;
-        if (!heroMode)
+        character.setRight();
+        /*if (!heroMode)
             image = image_right;
         else
-            image = hero_right;
+            image = hero_right;*/
 
         if (game.world.section == game.world.currentMap.sections - 1) {
-            if (xPos + width / 2 > APP_W) {
-                xPos = APP_W - width / 2;
+            if (xPos + character.width / 2 > APP_W) {   //character
+                xPos = APP_W - character.width / 2;     //character
             }
         } else {
             if (xPos > APP_W) {
                 ++game.world.section;
-                xPos = width / 2;
+                xPos = character.width / 2;             //character
             }
         }
 
@@ -249,10 +247,13 @@ public class Player {
             return;
         }
 
+        character.setFront();
+        /*
         if (!heroMode)
             image = image_front;
         else
             image = hero_front;
+         */
 
     }
 
@@ -263,26 +264,26 @@ public class Player {
             xPos += curSpeed;
 
             if (game.world.section == game.world.currentMap.sections - 1) {
-                if (xPos + width / 2 > APP_W) {
-                    xPos = APP_W - width / 2;
+                if (xPos + character.width / 2 > APP_W) {   //character
+                    xPos = APP_W - character.width / 2;     //character
                 }
             } else {
                 if (xPos > APP_W) {
                     ++game.world.section;
-                    xPos = width / 2;
+                    xPos = character.width / 2;             //character
                 }
             }
         } else if (jumpDir == Facing.LEFT){
             xPos -= curSpeed;
 
             if (game.world.section == 0) {
-                if (xPos - width / 2 < 0) {
-                    xPos = width / 2;
+                if (xPos - character.width / 2 < 0) {       //character
+                    xPos = character.width / 2;             //character
                 }
             } else {
                 if (xPos < 0) {
                     --game.world.section;
-                    xPos = APP_W - width / 2;
+                    xPos = APP_W - character.width / 2;     //character
                 }
             }
         }
@@ -313,13 +314,13 @@ public class Player {
 
     public void pullDown() {
 
-        if (yPos < game.world.groundLevel - height / 2) {
+        if (yPos < game.world.currentMap.groundLevel - character.height / 2) { //character added
             yPos += curSpeed;
             curSpeed *= game.world.gravity;
-            if (yPos >= game.world.groundLevel - height / 2) {
+            if (yPos >= game.world.currentMap.groundLevel - character.height / 2) { //character added
                 curSpeed = jumpSpeed;
                 falling = false;
-                yPos = game.world.groundLevel - height / 2;
+                yPos = game.world.currentMap.groundLevel - character.height / 2; //character added
             }
         }
 
@@ -345,11 +346,14 @@ public class Player {
         hero_right = Util.loadImage(PLAYER_HERO_RIGHT);
         if (hero_right == null) return false;
 
+        character = new Character(this);
+        if (!character.load()) return false;
+
         playerTransform = new AffineTransform();
 
         width = image_front.getWidth();
         height = image_front.getHeight();
-        yPos = game.world.groundLevel - height / 2;
+        yPos = game.world.currentMap.groundLevel - character.height / 2; //character added
 
         return true;
 

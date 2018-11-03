@@ -12,7 +12,7 @@ public class GUI {
 
     public void draw(Graphics2D g) {
 
-        if (game.running) {
+        if (!game.running) {
 
         } else {
 
