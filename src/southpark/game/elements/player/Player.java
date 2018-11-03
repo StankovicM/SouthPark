@@ -2,7 +2,6 @@ package southpark.game.elements.player;
 
 import rafgfxlib.Util;
 import southpark.game.Game;
-import southpark.game.elements.GObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
