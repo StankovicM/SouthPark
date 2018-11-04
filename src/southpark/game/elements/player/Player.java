@@ -361,7 +361,7 @@ public class Player {
     public void toggleHeroMode() {
 
         if (!heroAnim) {
-            heroAnim = true;
+            heroAnim = false; //TODO
             heroMode = heroMode ? false : true;
             lastTime = System.nanoTime();
         }

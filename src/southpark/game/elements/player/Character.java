@@ -54,6 +54,10 @@ public class Character {
     private static final String SHOES_LEFT  = "src/southpark/game/assets/shoes_left.png";
     private static final String SHOES_RIGHT  = "src/southpark/game/assets/shoes_right.png";
 
+    private static final String HERO_FRONT = "src/southpark/game/assets/hero/hero_1_front.png";
+    private static final String HERO_LEFT = "src/southpark/game/assets/hero/hero_1_left.png";
+    private static final String HERO_RIGHT = "src/southpark/game/assets/hero/hero_1_right.png";
+
     private static HashMap<String, BufferedImage> assets = new HashMap<>();
 
     private Player player;
@@ -81,7 +85,7 @@ public class Character {
     private BufferedImage hat;
     private AffineTransform hatTransform = new AffineTransform();
 
-    private boolean drawHair = true;
+    private boolean drawHair = false;
     public Color hair_color = Color.BLACK;//new Color(110, 50, 0);
     private static BufferedImage hair_front;
     private static BufferedImage hair_left;
@@ -104,7 +108,7 @@ public class Character {
     private BufferedImage acc;
     private AffineTransform accTransform = new AffineTransform();
 
-    private boolean drawShirt = true;
+    private boolean drawShirt = false;
     public Color shirt_color = Color.BLACK;
     private static BufferedImage shirt_front;
     private static BufferedImage shirt_left;
@@ -112,7 +116,7 @@ public class Character {
     private BufferedImage shirt;
     private AffineTransform shirtTransform = new AffineTransform();
 
-    private boolean drawPants = true;
+    private boolean drawPants = false;
     public Color pants_color = new Color(32, 154, 247);
     private static BufferedImage pants_front;
     private static BufferedImage pants_left;
@@ -120,6 +124,7 @@ public class Character {
     private BufferedImage pants;
     private AffineTransform pantsTransform = new AffineTransform();
 
+    private boolean drawShoes = false;
     public Color shoe_color = Color.BLACK;
     private static BufferedImage shoes_front;
     private static BufferedImage shoes_left;
@@ -130,6 +135,12 @@ public class Character {
     private static final int def_col[] = {160, 160, 160};
     private static final int def_shadow[] = {128, 128, 128};
 
+    private static BufferedImage hero_front;
+    private static BufferedImage hero_left;
+    private static BufferedImage hero_right;
+    private BufferedImage hero;
+    private AffineTransform heroTransform = new AffineTransform();
+
     public Character(Player player) {
 
         this.player = player;
@@ -138,7 +149,7 @@ public class Character {
 
     public void render(Graphics2D g) {
 
-        if (!player.heroAnim) {
+        //if (!player.heroAnim) {
             g.drawImage(image, player.playerTransform, null);
             if (drawMouth) g.drawImage(mouth, mouthTransform, null);
             if (drawAcc) g.drawImage(acc, accTransform, null);
@@ -147,10 +158,11 @@ public class Character {
             if (drawHat) g.drawImage(hat, hatTransform, null);
             if (drawShirt) g.drawImage(shirt, shirtTransform, null);
             if (drawPants) g.drawImage(pants, pantsTransform, null);
-            g.drawImage(shoes, shoeTransform, null);
-        } else {
+            if (drawShoes) g.drawImage(shoes, shoeTransform, null);
+            if (player.heroMode) g.drawImage(hero, heroTransform, null);
+        //} else {
 
-        }
+        //}
 
     }
 
@@ -172,59 +184,52 @@ public class Character {
 
         shoeTransform.setTransform(player.playerTransform);
 
+        heroTransform.setTransform(player.playerTransform);
+
     }
 
     public void setFront() {
 
-        if (!player.heroMode) {
-            image = image_front;
-            hat = hat_front;
-            mouth = mouth_front;
-            hair = hair_front;
-            eyebrows = eyebrows_front;
-            acc = acc_front;
-            shirt = shirt_front;
-            pants = pants_front;
-            shoes = shoes_front;
-        } else {
-
-        }
+        image = image_front;
+        hat = hat_front;
+        mouth = mouth_front;
+        hair = hair_front;
+        eyebrows = eyebrows_front;
+        acc = acc_front;
+        shirt = shirt_front;
+        pants = pants_front;
+        shoes = shoes_front;
+        hero = hero_front;
 
     }
 
     public void setLeft() {
 
-        if (!player.heroMode) {
-            image = image_left;
-            hat = hat_left;
-            mouth = mouth_left;
-            hair = hair_left;
-            eyebrows = eyebrows_left;
-            acc = acc_left;
-            shirt = shirt_left;
-            pants = pants_left;
-            shoes = shoes_left;
-        } else {
-
-        }
+        image = image_left;
+        hat = hat_left;
+        mouth = mouth_left;
+        hair = hair_left;
+        eyebrows = eyebrows_left;
+        acc = acc_left;
+        shirt = shirt_left;
+        pants = pants_left;
+        shoes = shoes_left;
+        hero = hero_left;
 
     }
 
     public void setRight() {
 
-        if (!player.heroMode) {
-            image = image_right;
-            hat = hat_right;
-            mouth = mouth_right;
-            hair = hair_right;
-            eyebrows = eyebrows_right;
-            acc = acc_right;
-            shirt = shirt_right;
-            pants = pants_right;
-            shoes = shoes_right;
-        } else {
-
-        }
+        image = image_right;
+        hat = hat_right;
+        mouth = mouth_right;
+        hair = hair_right;
+        eyebrows = eyebrows_right;
+        acc = acc_right;
+        shirt = shirt_right;
+        pants = pants_right;
+        shoes = shoes_right;
+        hero = hero_right;
 
     }
 
@@ -242,6 +247,9 @@ public class Character {
         assets.put("char_front", image_front);
         assets.put("char_left", image_left);
         assets.put("char_right", image_right);
+
+        width = image_front.getWidth();
+        height = image_front.getHeight();
 
         /*mouth_front = Util.loadImage(MOUTH_01_FRONT);
         if (mouth_front == null) return false;
@@ -300,6 +308,15 @@ public class Character {
         assets.put("shoes_front", shoes_front);
         assets.put("shoes_left", shoes_left);
         assets.put("shoes_right", shoes_right);
+
+        hero_front = Util.loadImage(HERO_FRONT);
+        if (hero_front == null) return false;
+
+        hero_left = Util.loadImage(HERO_LEFT);
+        if (hero_left == null) return false;
+
+        hero_right = Util.loadImage(HERO_RIGHT);
+        if (hero_right == null) return false;
 
         BufferedImage img;
         String imgName;
@@ -388,8 +405,6 @@ public class Character {
             assets.put(imgName, img);
         }
 
-        System.out.println("TEST");
-
         for (int i = 1; i <= shirtCount; ++i) {
             imgName = "shirt_" + Integer.toString(i) + "_front";
             img = Util.loadImage(SHIRT_PATH + imgName + ".png");
@@ -424,17 +439,10 @@ public class Character {
             assets.put(imgName, img);
         }
 
-        setHair(1, null);
+        //setHair(1, null);
         setShirt(1, null);
         setPants(1, null);
-
-        width = image_front.getWidth();
-        height = image_front.getHeight();
-
-        setShirtColor();
-        setHairColor();
-        setPantsColor();
-        setShoeColor();
+        setShoes(null);
 
         return true;
 
@@ -449,6 +457,8 @@ public class Character {
         hat_left = assets.get(imgName + "_left");
         hat_right = assets.get(imgName + "_right");
 
+        //TODO setHatColor
+
         drawHat = true;
 
     }
@@ -461,6 +471,8 @@ public class Character {
         hair_front = assets.get(imgName + "_front");
         hair_left = assets.get(imgName + "_left");
         hair_right = assets.get(imgName + "_right");
+
+        setHairColor();
 
         drawHair = true;
 
@@ -510,6 +522,8 @@ public class Character {
         shirt_left = assets.get(imgName + "_left");
         shirt_right = assets.get(imgName + "_right");
 
+        setShirtColor();
+
         drawShirt = true;
 
     }
@@ -523,6 +537,8 @@ public class Character {
         pants_left = assets.get(imgName + "_left");
         pants_right = assets.get(imgName + "_right");
 
+        setPantsColor();
+
         drawPants = true;
 
     }
@@ -530,6 +546,10 @@ public class Character {
     public void setShoes(Color color) {
 
         if (color != null) shoe_color = color;
+
+        setShoeColor();
+
+        drawShoes = true;
 
     }
 
