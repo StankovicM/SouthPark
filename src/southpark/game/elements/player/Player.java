@@ -32,7 +32,7 @@ public class Player {
     public int width;
     public int height;
 
-    private Game game;
+    public Game game;
 
     public double xPos;
     public double yPos;
@@ -54,11 +54,6 @@ public class Player {
 
     public boolean heroMode = false;
     public boolean heroAnim = false;
-
-    private static final long ANIM_TIME = 5500000000l;
-    private long lastTime = System.nanoTime();
-    private long now;
-    private long time = 0;
 
     public double flightHeight = 370.0;
     public double flightSpeed = 4.0;
@@ -82,58 +77,6 @@ public class Player {
     public void render(Graphics2D g) {
 
         character.render(g);
-
-        /*if (!heroAnim) {
-            g.drawImage(image, playerTransform, null);
-        } else {
-            now = System.nanoTime();
-            time += now - lastTime;
-            if (time >= ANIM_TIME) {
-                game.genParticles(xPos, yPos, 10.0, 60, 100);
-                if (heroMode)
-                    partCol = new Color(130, 2, 104);
-                else
-                    partCol = Color.YELLOW;
-
-                heroAnim = false;
-                time = 0;
-            }
-
-            if (time >= 1500000000l && time <= 2000000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            if (time >= 2500000000l && time <= 3000000000l)
-                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
-
-            if (time >= 3500000000l && time <= 4000000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            if (time >= 4250000000l && time <= 4500000000l)
-                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
-
-            if (time >= 4500000000l && time <= 4750000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            if (time >= 4750000000l && time <= 5000000000l)
-                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
-
-            if (time >= 5000000000l && time <= 5100000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            if (time >= 5100000000l && time <= 5200000000l)
-                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
-
-            if (time >= 5200000000l && time <= 5300000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            if (time >= 5300000000l && time <= 5400000000l)
-                g.drawImage(heroMode ? image_front : hero_front, playerTransform, null);
-
-            if (time >= 5400000000l)
-                g.drawImage(heroMode ? hero_front : image_front, playerTransform, null);
-
-            lastTime = now;
-        }*/
 
     }
 
@@ -170,19 +113,15 @@ public class Player {
 
         facing = Facing.LEFT;
         character.setLeft();
-        /*if (!heroMode)
-            image = image_left;
-        else
-            image = hero_left;*/
 
         if (game.world.section == 0) {
-            if (xPos - character.width / 2 < 0) {   //character
-                xPos = character.width / 2;         //character
+            if (xPos - character.width / 2 < 0) {
+                xPos = character.width / 2;
             }
         } else {
             if (xPos < 0) {
                 --game.world.section;
-                xPos = APP_W - character.width / 2; //character
+                xPos = APP_W - character.width / 2;
             }
         }
 
@@ -221,19 +160,15 @@ public class Player {
 
         facing = Facing.RIGHT;
         character.setRight();
-        /*if (!heroMode)
-            image = image_right;
-        else
-            image = hero_right;*/
 
         if (game.world.section == game.world.currentMap.sections - 1) {
-            if (xPos + character.width / 2 > APP_W) {   //character
-                xPos = APP_W - character.width / 2;     //character
+            if (xPos + character.width / 2 > APP_W) {
+                xPos = APP_W - character.width / 2;
             }
         } else {
             if (xPos > APP_W) {
                 ++game.world.section;
-                xPos = character.width / 2;             //character
+                xPos = character.width / 2;
             }
         }
 
@@ -247,12 +182,6 @@ public class Player {
         }
 
         character.setFront();
-        /*
-        if (!heroMode)
-            image = image_front;
-        else
-            image = hero_front;
-         */
 
     }
 
@@ -263,26 +192,26 @@ public class Player {
             xPos += curSpeed;
 
             if (game.world.section == game.world.currentMap.sections - 1) {
-                if (xPos + character.width / 2 > APP_W) {   //character
-                    xPos = APP_W - character.width / 2;     //character
+                if (xPos + character.width / 2 > APP_W) {
+                    xPos = APP_W - character.width / 2;
                 }
             } else {
                 if (xPos > APP_W) {
                     ++game.world.section;
-                    xPos = character.width / 2;             //character
+                    xPos = character.width / 2;
                 }
             }
         } else if (jumpDir == Facing.LEFT){
             xPos -= curSpeed;
 
             if (game.world.section == 0) {
-                if (xPos - character.width / 2 < 0) {       //character
-                    xPos = character.width / 2;             //character
+                if (xPos - character.width / 2 < 0) {
+                    xPos = character.width / 2;
                 }
             } else {
                 if (xPos < 0) {
                     --game.world.section;
-                    xPos = APP_W - character.width / 2;     //character
+                    xPos = APP_W - character.width / 2;
                 }
             }
         }
@@ -307,19 +236,17 @@ public class Player {
 
         curSpeed = 1.0;
 
-        //TODO fly
-
     }
 
     public void pullDown() {
 
-        if (yPos < game.world.currentMap.groundLevel - character.height / 2) { //character added
+        if (yPos < game.world.currentMap.groundLevel - character.height / 2) {
             yPos += curSpeed;
             curSpeed *= game.world.gravity;
-            if (yPos >= game.world.currentMap.groundLevel - character.height / 2) { //character added
+            if (yPos >= game.world.currentMap.groundLevel - character.height / 2) {
                 curSpeed = jumpSpeed;
                 falling = false;
-                yPos = game.world.currentMap.groundLevel - character.height / 2; //character added
+                yPos = game.world.currentMap.groundLevel - character.height / 2;
             }
         }
 
@@ -352,7 +279,7 @@ public class Player {
 
         width = image_front.getWidth();
         height = image_front.getHeight();
-        yPos = game.world.currentMap.groundLevel - character.height / 2; //character added
+        yPos = game.world.currentMap.groundLevel - character.height / 2;
 
         return true;
 
@@ -361,9 +288,9 @@ public class Player {
     public void toggleHeroMode() {
 
         if (!heroAnim) {
-            heroAnim = false; //TODO
+            heroAnim = true;
             heroMode = heroMode ? false : true;
-            lastTime = System.nanoTime();
+            character.lastTime = System.nanoTime();
         }
 
     }

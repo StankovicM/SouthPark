@@ -135,11 +135,19 @@ public class Character {
     private static final int def_col[] = {160, 160, 160};
     private static final int def_shadow[] = {128, 128, 128};
 
+    private boolean drawHero = false;
     private static BufferedImage hero_front;
     private static BufferedImage hero_left;
     private static BufferedImage hero_right;
     private BufferedImage hero;
     private AffineTransform heroTransform = new AffineTransform();
+
+    private static final long ANIM_TIME = 5500000000l;
+    public long lastTime = System.nanoTime();
+    private long now;
+    private long time = 0;
+
+    public Color partCol = Color.YELLOW;
 
     public Character(Player player) {
 
@@ -149,20 +157,96 @@ public class Character {
 
     public void render(Graphics2D g) {
 
-        //if (!player.heroAnim) {
-            g.drawImage(image, player.playerTransform, null);
-            if (drawMouth) g.drawImage(mouth, mouthTransform, null);
-            if (drawAcc) g.drawImage(acc, accTransform, null);
-            if (drawHair) g.drawImage(hair, hairTransform, null);
-            if (drawEyebrows) g.drawImage(eyebrows, eyebrowsTransform, null);
-            if (drawHat) g.drawImage(hat, hatTransform, null);
-            if (drawShirt) g.drawImage(shirt, shirtTransform, null);
-            if (drawPants) g.drawImage(pants, pantsTransform, null);
-            if (drawShoes) g.drawImage(shoes, shoeTransform, null);
-            if (player.heroMode) g.drawImage(hero, heroTransform, null);
-        //} else {
+        if (!player.heroAnim) {
+            drawCharacter(g);
+        } else {
+            now = System.nanoTime();
+            time += now - lastTime;
+            if (time >= ANIM_TIME) {
+                player.game.genParticles(player.xPos, player.yPos, 10.0, 60, 100);
+                if (player.heroMode)
+                    partCol = new Color(130, 2, 104);
+                else
+                    partCol = Color.YELLOW;
 
-        //}
+                player.heroAnim = false;
+                time = 0;
+            }
+
+            if (time >= 1500000000l && time <= 2000000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            if (time >= 2500000000l && time <= 3000000000l) {
+                drawHero = true;
+                drawCharacter(g);
+            }
+
+            if (time >= 3500000000l && time <= 4000000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            if (time >= 4250000000l && time <= 4500000000l) {
+                drawHero = true;
+                drawCharacter(g);
+            }
+
+            if (time >= 4500000000l && time <= 4750000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            if (time >= 4750000000l && time <= 5000000000l) {
+                drawHero = true;
+                drawCharacter(g);
+            }
+
+            if (time >= 5000000000l && time <= 5100000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            if (time >= 5100000000l && time <= 5200000000l) {
+                drawHero = true;
+                drawCharacter(g);
+            }
+
+            if (time >= 5200000000l && time <= 5300000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            if (time >= 5300000000l && time <= 5400000000l) {
+                drawHero = true;
+                drawCharacter(g);
+            }
+
+            if (time >= 5400000000l) {
+                drawHero = false;
+                drawCharacter(g);
+            }
+
+            drawHero = true;
+
+            lastTime = now;
+        }
+
+    }
+
+    private void drawCharacter(Graphics2D g) {
+
+        g.drawImage(image, player.playerTransform, null);
+        if (drawMouth) g.drawImage(mouth, mouthTransform, null);
+        if (drawAcc) g.drawImage(acc, accTransform, null);
+        if (drawHair) g.drawImage(hair, hairTransform, null);
+        if (drawEyebrows) g.drawImage(eyebrows, eyebrowsTransform, null);
+        if (drawHat) g.drawImage(hat, hatTransform, null);
+        if (drawShirt) g.drawImage(shirt, shirtTransform, null);
+        if (drawPants) g.drawImage(pants, pantsTransform, null);
+        if (drawShoes) g.drawImage(shoes, shoeTransform, null);
+        if (drawHero) g.drawImage(hero, heroTransform, null);
 
     }
 
