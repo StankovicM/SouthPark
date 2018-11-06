@@ -9,7 +9,7 @@ public class Main {
 
         Game game = new Game("South Park", APP_W, APP_H);
         game.init();
-        game.startGame();
+        game.startThread();
 
     }
 

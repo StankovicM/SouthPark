@@ -18,37 +18,17 @@ public class Character {
     private static final String SHIRT_PATH = "src/southpark/game/assets/shirts/";
     private static final String PANTS_PATH = "src/southpark/game/assets/pants/";
 
-    private static final int hatCount = 0;
-    private static final int hairCount = 2;
-    private static final int eyebrowCount = 0;
-    private static final int mouthCount = 1;
-    private static final int accCount = 1;
-    private static final int shirtCount = 3;
-    private static final int pantsCount = 2;
+    public static final int hatCount = 0;
+    public static final int hairCount = 2;
+    public static final int eyebrowCount = 0;
+    public static final int mouthCount = 1;
+    public static final int accCount = 1;
+    public static final int shirtCount = 3;
+    public static final int pantsCount = 2;
 
     private static final String CHAR_FRONT = "src/southpark/game/assets/character_generic_front.png";
     private static final String CHAR_LEFT  = "src/southpark/game/assets/character_generic_left.png";
     private static final String CHAR_RIGHT  = "src/southpark/game/assets/character_generic_right.png";
-
-    /*private static final String MOUTH_01_FRONT = "src/southpark/game/assets/mouths/mouth_01_front.png";
-    private static final String MOUTH_01_LEFT = "src/southpark/game/assets/mouths/mouth_01_left.png";
-    private static final String MOUTH_01_RIGHT = "src/southpark/game/assets/mouths/mouth_01_right.png";
-
-    private static final String HAIR_01_FRONT = "src/southpark/game/assets/hairs/hair_02_front.png";
-    private static final String HAIR_01_LEFT = "src/southpark/game/assets/hairs/hair_02_left.png";
-    private static final String HAIR_01_RIGHT = "src/southpark/game/assets/hairs/hair_02_right.png";
-
-    private static final String ACC_01_FRONT = "src/southpark/game/assets/accessories/acc_01_front.png";
-    private static final String ACC_01_LEFT = "src/southpark/game/assets/accessories/acc_01_left.png";
-    private static final String ACC_01_RIGHT = "src/southpark/game/assets/accessories/acc_01_right.png";
-
-    private static final String SHIRT_01_FRONT = "src/southpark/game/assets/shirts/shirt_03_front.png";
-    private static final String SHIRT_01_LEFT = "src/southpark/game/assets/shirts/shirt_03_left.png";
-    private static final String SHIRT_01_RIGHT = "src/southpark/game/assets/shirts/shirt_03_right.png";
-
-    private static final String PANTS_01_FRONT = "src/southpark/game/assets/pants/pants_02_front.png";
-    private static final String PANTS_01_LEFT = "src/southpark/game/assets/pants/pants_02_left.png";
-    private static final String PANTS_01_RIGHT = "src/southpark/game/assets/pants/pants_02_right.png";*/
 
     private static final String SHOES_FRONT  = "src/southpark/game/assets/shoes_front.png";
     private static final String SHOES_LEFT  = "src/southpark/game/assets/shoes_left.png";
@@ -58,7 +38,7 @@ public class Character {
     private static final String HERO_LEFT = "src/southpark/game/assets/hero/hero_1_left.png";
     private static final String HERO_RIGHT = "src/southpark/game/assets/hero/hero_1_right.png";
 
-    private static HashMap<String, BufferedImage> assets = new HashMap<>();
+    public static HashMap<String, BufferedImage> assets = new HashMap<>();
 
     private Player player;
 
@@ -174,61 +154,61 @@ public class Character {
             }
 
             if (time >= 1500000000l && time <= 2000000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
             if (time >= 2500000000l && time <= 3000000000l) {
-                drawHero = true;
+                drawHero = player.heroMode ? false : true;
                 drawCharacter(g);
             }
 
             if (time >= 3500000000l && time <= 4000000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
             if (time >= 4250000000l && time <= 4500000000l) {
-                drawHero = true;
+                drawHero = player.heroMode ? false : true;
                 drawCharacter(g);
             }
 
             if (time >= 4500000000l && time <= 4750000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
             if (time >= 4750000000l && time <= 5000000000l) {
-                drawHero = true;
+                drawHero = player.heroMode ? false : true;
                 drawCharacter(g);
             }
 
             if (time >= 5000000000l && time <= 5100000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
             if (time >= 5100000000l && time <= 5200000000l) {
-                drawHero = true;
+                drawHero = player.heroMode ? false : true;
                 drawCharacter(g);
             }
 
             if (time >= 5200000000l && time <= 5300000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
             if (time >= 5300000000l && time <= 5400000000l) {
-                drawHero = true;
+                drawHero = player.heroMode ? false : true;
                 drawCharacter(g);
             }
 
             if (time >= 5400000000l) {
-                drawHero = false;
+                drawHero = player.heroMode ? true : false;
                 drawCharacter(g);
             }
 
-            drawHero = true;
+            drawHero = player.heroMode ? true : false;
 
             lastTime = now;
         }
@@ -334,51 +314,6 @@ public class Character {
 
         width = image_front.getWidth();
         height = image_front.getHeight();
-
-        /*mouth_front = Util.loadImage(MOUTH_01_FRONT);
-        if (mouth_front == null) return false;
-
-        mouth_left = Util.loadImage(MOUTH_01_LEFT);
-        if (mouth_left == null) return false;
-
-        mouth_right = Util.loadImage(MOUTH_01_RIGHT);
-        if (mouth_right == null) return false;
-
-        hair_front = Util.loadImage(HAIR_01_FRONT);
-        if (hair_front == null) return false;
-
-        hair_left = Util.loadImage(HAIR_01_LEFT);
-        if (hair_left == null) return false;
-
-        hair_right = Util.loadImage(HAIR_01_RIGHT);
-        if (hair_right == null) return false;
-
-        acc_front = Util.loadImage(ACC_01_FRONT);
-        if (acc_front == null) return false;
-
-        acc_left = Util.loadImage(ACC_01_LEFT);
-        if (acc_left == null) return false;
-
-        acc_right = Util.loadImage(ACC_01_RIGHT);
-        if (acc_right == null) return false;
-
-        shirt_front = Util.loadImage(SHIRT_01_FRONT);
-        if (shirt_front == null) return false;
-
-        shirt_left = Util.loadImage(SHIRT_01_LEFT);
-        if (shirt_left == null) return false;
-
-        shirt_right = Util.loadImage(SHIRT_01_RIGHT);
-        if (shirt_right == null) return false;
-
-        pants_front = Util.loadImage(PANTS_01_FRONT);
-        if (pants_front == null) return false;
-
-        pants_left = Util.loadImage(PANTS_01_LEFT);
-        if (pants_left == null) return false;
-
-        pants_right = Util.loadImage(PANTS_01_RIGHT);
-        if (pants_right == null) return false;*/
 
         shoes_front = Util.loadImage(SHOES_FRONT);
         if (shoes_front == null) return false;
@@ -524,9 +459,9 @@ public class Character {
         }
 
         //setHair(1, null);
-        setShirt(1, null);
-        setPants(1, null);
-        setShoes(null);
+        //setShirt(1, null);
+        //setPants(1, null);
+        //setShoes(null);
 
         return true;
 
@@ -674,7 +609,7 @@ public class Character {
     private void setHairColor() {
 
         int rgb[] = new int[4];
-        int[] shoe_rgb = {hair_color.getRed(), hair_color.getGreen(), hair_color.getBlue(), 255};
+        int[] hair_rgb = {hair_color.getRed(), hair_color.getGreen(), hair_color.getBlue(), 255};
 
         WritableRaster raster_f = hair_front.getRaster();
         WritableRaster raster_l = hair_left.getRaster();
@@ -684,17 +619,17 @@ public class Character {
             for (int x = 0; x < width; ++x) {
                 raster_f.getPixel(x, y, rgb);
                 if (areColorsEqual(def_col, rgb)) {
-                    raster_f.setPixel(x, y, shoe_rgb);
+                    raster_f.setPixel(x, y, hair_rgb);
                 }
 
                 raster_l.getPixel(x, y, rgb);
                 if (areColorsEqual(def_col, rgb)) {
-                    raster_l.setPixel(x, y, shoe_rgb);
+                    raster_l.setPixel(x, y, hair_rgb);
                 }
 
                 raster_r.getPixel(x, y, rgb);
                 if (areColorsEqual(def_col, rgb)) {
-                    raster_r.setPixel(x, y, shoe_rgb);
+                    raster_r.setPixel(x, y, hair_rgb);
                 }
             }
         }

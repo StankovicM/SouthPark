@@ -32,7 +32,7 @@ public class Game extends GameFrame {
     public int crosshairY = APP_H / 2;
     public int crosshairSize;
 
-    public boolean paused = false; //TODO postaviti na true na kraju, da bi se prvo otvorio meni
+    public boolean paused = true; //TODO postaviti na true na kraju, da bi se prvo otvorio meni
     public boolean ready = true;
     public boolean running = false;
     public boolean drawCrosshair = false;
@@ -43,13 +43,14 @@ public class Game extends GameFrame {
 
     public void init() {
 
-        gui = new GUI(this);
-
         world = new World();
         ready = world.load();
 
         player = new Player(this);
         ready = player.load();
+
+        gui = new GUI(this);
+        ready = gui.load();
 
         bus = new Bus(this);
         ready = bus.load();
@@ -70,11 +71,20 @@ public class Game extends GameFrame {
     public void startGame() {
 
         if (ready) {
-            running = true; //TODO ukloniti kada se paused postavi na true
-            startThread();
+            running = true;
+            paused = false;
         } else {
             System.err.println("Game failed to start!");
         }
+
+    }
+
+    public void stopGame() {
+
+        running = false;
+        paused = false;
+
+        //getWindow().dispose();
 
     }
 
@@ -82,25 +92,27 @@ public class Game extends GameFrame {
     public void render(Graphics2D g, int sw, int sh) {
 
         if (!paused) {
-            g.drawImage(world.getCurrentImage(), 0, 0, null);
+            if (running) {
+                g.drawImage(world.getCurrentImage(), 0, 0, null);
 
-            player.render(g);
+                player.render(g);
 
-            bus.render();
+                bus.render();
 
-            g.setColor(player.partCol);
-            for(Particle p : particles) {
-                if(p.life <= 0) continue;
+                g.setColor(player.partCol);
+                for (Particle p : particles) {
+                    if (p.life <= 0) continue;
 
-                p.render(g);
-            }
+                    p.render(g);
+                }
 
-            if (drawCrosshair) {
-                g.setColor(Color.YELLOW);
-                g.drawImage(crosshair, crosshairX - crosshairSize / 2, crosshairY - crosshairSize / 2, null);
+                if (drawCrosshair) {
+                    g.setColor(Color.YELLOW);
+                    g.drawImage(crosshair, crosshairX - crosshairSize / 2, crosshairY - crosshairSize / 2, null);
+                }
             }
         } else {
-            gui.draw(g);
+            gui.render(g);
         }
 
     }
@@ -109,43 +121,45 @@ public class Game extends GameFrame {
     public void update() {
 
         if (!paused) {
-            player.facing = Player.Facing.NONE;
-            if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
-                player.moveLeft();
-            }
-            if (isKeyDown(KeyEvent.VK_D) && !player.heroAnim) {
-                player.moveRight();
-            }
+            if (running) {
+                player.facing = Player.Facing.NONE;
+                if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
+                    player.moveLeft();
+                }
+                if (isKeyDown(KeyEvent.VK_D) && !player.heroAnim) {
+                    player.moveRight();
+                }
 
-            player.inFlight = false;
-            if (player.heroMode && !player.heroAnim && isKeyDown(KeyEvent.VK_F)) {
-                player.inFlight = true;
-                player.fly();
-            }
+                player.inFlight = false;
+                if (player.heroMode && !player.heroAnim && isKeyDown(KeyEvent.VK_F)) {
+                    player.inFlight = true;
+                    player.fly();
+                }
 
-            if (!player.inJump && !player.inFlight)
-               player.pullDown();
+                if (!player.inJump && !player.inFlight)
+                    player.pullDown();
 
-            if (player.facing == Player.Facing.NONE) {
-                player.angle = -Math.PI / 2.0;
-                player.idle();
-            }
+                if (player.facing == Player.Facing.NONE) {
+                    player.angle = -Math.PI / 2.0;
+                    player.idle();
+                }
 
-            //for (GObject o : objects)
-            //    if (o.isFalling())
-            //        o.pullDown();
+                //for (GObject o : objects)
+                //    if (o.isFalling())
+                //        o.pullDown();
 
-            player.playerTransform.setToIdentity();
-            player.playerTransform.translate(player.xPos , player.yPos);
-            player.playerTransform.rotate(player.angle + Math.PI / 2.0);
-            player.playerTransform.translate(-player.character.width / 2, -player.character.height / 2);
+                player.playerTransform.setToIdentity();
+                player.playerTransform.translate(player.xPos, player.yPos);
+                player.playerTransform.rotate(player.angle + Math.PI / 2.0);
+                player.playerTransform.translate(-player.character.width / 2, -player.character.height / 2);
 
-            player.character.update();
+                player.character.update();
 
-            for (Particle p : particles) {
-                if (p.life <= 0) continue;
+                for (Particle p : particles) {
+                    if (p.life <= 0) continue;
 
-                p.update();
+                    p.update();
+                }
             }
         } else {
 
@@ -187,6 +201,12 @@ public class Game extends GameFrame {
 
         if (button == GFMouseButton.Right)
             drawCrosshair = drawCrosshair ? false : true;
+
+        if (button == GFMouseButton.Left) {
+            if (!running || paused) {
+                gui.notifyButtons();
+            }
+        }
 
     }
 
@@ -232,4 +252,5 @@ public class Game extends GameFrame {
     public void handleKeyUp(int keyCode) {
 
     }
+
 }
