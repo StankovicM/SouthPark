@@ -45,6 +45,11 @@ public class Character {
     public int width;
     public int height;
 
+    private static BufferedImage char_front;
+    private static BufferedImage char_left;
+    private static BufferedImage char_right;
+    private BufferedImage character;
+
     private static BufferedImage image_front;
     private static BufferedImage image_left;
     private static BufferedImage image_right;
@@ -217,7 +222,8 @@ public class Character {
 
     private void drawCharacter(Graphics2D g) {
 
-        g.drawImage(image, player.playerTransform, null);
+        g.drawImage(character, player.playerTransform, null);
+        /*g.drawImage(image, player.playerTransform, null);
         if (drawMouth) g.drawImage(mouth, mouthTransform, null);
         if (drawAcc) g.drawImage(acc, accTransform, null);
         if (drawHair) g.drawImage(hair, hairTransform, null);
@@ -225,14 +231,14 @@ public class Character {
         if (drawHat) g.drawImage(hat, hatTransform, null);
         if (drawShirt) g.drawImage(shirt, shirtTransform, null);
         if (drawPants) g.drawImage(pants, pantsTransform, null);
-        if (drawShoes) g.drawImage(shoes, shoeTransform, null);
+        if (drawShoes) g.drawImage(shoes, shoeTransform, null);*/
         if (drawHero) g.drawImage(hero, heroTransform, null);
 
     }
 
     public void update() {
 
-        hatTransform.setTransform(player.playerTransform);
+        /*hatTransform.setTransform(player.playerTransform);
 
         mouthTransform.setTransform(player.playerTransform);
 
@@ -246,7 +252,7 @@ public class Character {
 
         pantsTransform.setTransform(player.playerTransform);
 
-        shoeTransform.setTransform(player.playerTransform);
+        shoeTransform.setTransform(player.playerTransform);*/
 
         heroTransform.setTransform(player.playerTransform);
 
@@ -254,7 +260,8 @@ public class Character {
 
     public void setFront() {
 
-        image = image_front;
+        character = char_front;
+        /*image = image_front;
         hat = hat_front;
         mouth = mouth_front;
         hair = hair_front;
@@ -262,14 +269,15 @@ public class Character {
         acc = acc_front;
         shirt = shirt_front;
         pants = pants_front;
-        shoes = shoes_front;
+        shoes = shoes_front;*/
         hero = hero_front;
 
     }
 
     public void setLeft() {
 
-        image = image_left;
+        character = char_left;
+        /*image = image_left;
         hat = hat_left;
         mouth = mouth_left;
         hair = hair_left;
@@ -277,14 +285,15 @@ public class Character {
         acc = acc_left;
         shirt = shirt_left;
         pants = pants_left;
-        shoes = shoes_left;
+        shoes = shoes_left;*/
         hero = hero_left;
 
     }
 
     public void setRight() {
 
-        image = image_right;
+        character = char_right;
+        /*image = image_right;
         hat = hat_right;
         mouth = mouth_right;
         hair = hair_right;
@@ -292,7 +301,7 @@ public class Character {
         acc = acc_right;
         shirt = shirt_right;
         pants = pants_right;
-        shoes = shoes_right;
+        shoes = shoes_right;*/
         hero = hero_right;
 
     }
@@ -464,6 +473,125 @@ public class Character {
         //setShoes(null);
 
         return true;
+
+    }
+
+    public void mergeChar() {
+
+        int[] rgba = new int [4];
+        WritableRaster raster_f = Util.createRaster(width, height, true);
+        WritableRaster raster_l = Util.createRaster(width, height, true);
+        WritableRaster raster_r = Util.createRaster(width, height, true);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                //Front
+                image_front.getRaster().getPixel(x, y, rgba);
+                raster_f.setPixel(x, y, rgba);
+
+                if (shirt_front != null) {
+                    shirt_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
+
+                if (pants_front != null) {
+                    pants_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
+
+                if (acc_front != null) {
+                    acc_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
+
+                if (hair_front != null) {
+                    hair_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
+
+                if (shoes_front != null) {
+                    shoes_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
+
+                //Left
+                image_left.getRaster().getPixel(x, y, rgba);
+                raster_l.setPixel(x, y, rgba);
+
+                if (shirt_left != null) {
+                    shirt_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
+                if (pants_left != null) {
+                    pants_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
+                if (acc_left != null) {
+                    acc_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
+                if (hair_left != null) {
+                    hair_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
+                if (shoes_left != null) {
+                    shoes_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
+                //Right
+                image_right.getRaster().getPixel(x, y, rgba);
+                raster_r.setPixel(x, y, rgba);
+
+                if (shirt_right != null) {
+                    shirt_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
+
+                if (pants_right != null) {
+                    pants_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
+
+                if (acc_right != null) {
+                    acc_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
+
+                if (hair_right != null) {
+                    hair_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
+
+                if (shoes_right != null) {
+                    shoes_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
+            }
+        }
+
+        char_front = Util.rasterToImage(raster_f);
+        char_left = Util.rasterToImage(raster_l);
+        char_right = Util.rasterToImage(raster_r);
+        character = char_front;
 
     }
 

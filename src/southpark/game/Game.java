@@ -71,6 +71,7 @@ public class Game extends GameFrame {
     public void startGame() {
 
         if (ready) {
+            player.character.mergeChar();
             running = true;
             paused = false;
         } else {
