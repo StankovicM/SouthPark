@@ -34,9 +34,7 @@ public class CharacterSelection extends Menu {
     public int pants_col_ind = 0;
     public int shoes_col_ind = 0;
 
-    private BufferedImage hat;
     private BufferedImage hair;
-    private BufferedImage acc;
     private BufferedImage mouth;
     private BufferedImage shirt;
     private BufferedImage pants;
@@ -45,7 +43,6 @@ public class CharacterSelection extends Menu {
     public ArrayList<Color> colors = new ArrayList<>();
 
     private boolean pomeranje=false;
-    private float speed = 1.0f;
 
     private float pozX=-50;
     private float pozY=0;
@@ -102,7 +99,6 @@ public class CharacterSelection extends Menu {
 
     public boolean load() {
 
-       // background=Util.loadImage(CSBG_PATH);
         blur();
         if(background==null)
             return false;

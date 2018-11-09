@@ -25,6 +25,8 @@ public class MainMenu extends Menu {
         for (Button b : buttons)
             b.render(g);
 
+
+
     }
 
     public boolean load() {

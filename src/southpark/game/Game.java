@@ -5,7 +5,6 @@ import rafgfxlib.GameFrame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 
 import rafgfxlib.Util;
@@ -17,22 +16,10 @@ import southpark.game.elements.vehicle.Bus;
 import southpark.game.elements.world.World;
 import southpark.game.gui.GUI;
 import southpark.game.gui.characterselection.CharacterSelection;
-import southpark.game.gui.pausemenu.PauseMenu;
-import southpark.game.utils.Constants;
 
 import static southpark.game.utils.Constants.*;
 
 public class Game extends GameFrame {
-
-    public float position =0.0f;
-    public BufferedImage slika;
-    //src/southpark/game/assets/town.png
-    public boolean animacija=false;
-   // public float speed = 0.02f;
-   // public boolean nesto=false;
-    public int pozX=0;
-    public int pozY=0;
-
 
     public GUI gui;
     public World world;
@@ -43,7 +30,6 @@ public class Game extends GameFrame {
     public ArrayList<GObject> objects = new ArrayList<>();
 
     public CharacterSelection cs;
-    //public PauseMenu pm;
 
     public BufferedImage crosshair;
     public int crosshairX = APP_W / 2;
@@ -90,9 +76,6 @@ public class Game extends GameFrame {
 
         setUpdateRate(60);
         initGameWindow();
-        //setLocation(SCR_W / 2 - APP_W / 2, SCR_H / 2 - APP_H / 2);
-
-
 
     }
 
@@ -102,7 +85,6 @@ public class Game extends GameFrame {
             player.character.mergeChar();
             running = true;
             paused = false;
-            animacija=true;
         } else {
             System.err.println("Game failed to start!");
         }
@@ -123,10 +105,7 @@ public class Game extends GameFrame {
 
         if (!paused) {
             if (running) {
-
-            //PROBAJ RESITI BLUR PREKO world.getcurrentImage!!!
                 g.drawImage(world.getCurrentImage(),0,0,null);
-                //g.drawImage(gui.cs.getBackground(),0,0,null); ovde mogu dobiti taj background
 
                 for (Bullet b : bullets) {
                     if (!b.isAlive) continue;
@@ -151,34 +130,13 @@ public class Game extends GameFrame {
                 }
             }
         } else {
-            /*
-            if(animacija) {
-                g.drawImage(world.getCurrentImage(),
-                        (int) (0 + position * (Constants.APP_W)),
-                        (int) (position * Constants.APP_H * 0.25f),
-                        (int) (Constants.APP_W * (1.0f - position * 0.5f)),
-                        (int) (Constants.APP_H * (0.5f + position * 0.5f)), null);
-                //kako ovde naci sliku koja treba da se renderuje (pause menu????)
-                g.drawImage(gui.cs.getBackground(),
-                        (int) (-(1.0f - position) * (Constants.APP_W)),
-                        (int) ((1.0f - position) * Constants.APP_H * 0.25f),
-                        (int) (Constants.APP_W * (0.5f + position * 0.5f)),
-                        (int) (Constants.APP_H * (0.5f + position * 0.5f)),
-                        null);
-            }
-            // g.drawImage(slika,0,0,null);
-            //gui.cs.getBackground();
-            */
-
-                gui.render(g);
-
+            gui.render(g);
         }
 
     }
 
     @Override
     public void update() {
-
 
         if (!paused) {
             if (running) {
@@ -206,10 +164,6 @@ public class Game extends GameFrame {
                     player.angle = -Math.PI / 2.0;
                     player.idle();
                 }
-
-                //for (GObject o : objects)
-                //    if (o.isFalling())
-                //        o.pullDown();
 
                 player.playerTransform.setToIdentity();
                 player.playerTransform.translate(player.xPos, player.yPos);
@@ -256,14 +210,10 @@ public class Game extends GameFrame {
     }
 
     @Override
-    public void handleWindowInit() {
-
-    }
+    public void handleWindowInit() {  }
 
     @Override
-    public void handleWindowDestroy() {
-
-    }
+    public void handleWindowDestroy() {  }
 
     @Override
     public void handleMouseDown(int x, int y, GFMouseButton button) {
@@ -293,9 +243,7 @@ public class Game extends GameFrame {
     }
 
     @Override
-    public void handleMouseUp(int x, int y, GFMouseButton button) {
-
-    }
+    public void handleMouseUp(int x, int y, GFMouseButton button) {  }
 
     @Override
     public void handleMouseMove(int x, int y) {
@@ -331,8 +279,6 @@ public class Game extends GameFrame {
     }
 
     @Override
-    public void handleKeyUp(int keyCode) {
-
-    }
+    public void handleKeyUp(int keyCode) {  }
 
 }

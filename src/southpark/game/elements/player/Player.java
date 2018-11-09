@@ -1,38 +1,16 @@
 package southpark.game.elements.player;
 
-import rafgfxlib.Util;
 import southpark.game.Game;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 
 import static southpark.game.utils.Constants.*;
 
 public class Player {
 
-    public static final String WHIRL_PATH = "src/southpark/game/assets/whirl.png";
-    public String PLAYER_FRONT_PATH = "src/southpark/game/assets/cartman_front.png";
-    public String PLAYER_LEFT_PATH = "src/southpark/game/assets/cartman_left.png";
-    public String PLAYER_RIGHT_PATH = "src/southpark/game/assets/cartman_right.png";
-    public String PLAYER_HERO_FRONT = "src/southpark/game/assets/coon_front.png";
-    public String PLAYER_HERO_LEFT = "src/southpark/game/assets/coon_left.png";
-    public String PLAYER_HERO_RIGHT = "src/southpark/game/assets/coon_right.png";
-
-    public static BufferedImage image_front;
-    public static BufferedImage image_left;
-    public static BufferedImage image_right;
-    public static BufferedImage hero_front;
-    public static BufferedImage hero_left;
-    public static BufferedImage hero_right;
-    public BufferedImage image;
-
     public Character character;
     public AffineTransform playerTransform;
-
-    public int width;
-    public int height;
 
     public Game game;
 
@@ -256,32 +234,11 @@ public class Player {
     }
 
     public boolean load() {
-
-        image_front = Util.loadImage(PLAYER_FRONT_PATH);
-        if (image_front == null) return false;
-
-        image_left = Util.loadImage(PLAYER_LEFT_PATH);
-        if (image_left == null) return false;
-
-        image_right = Util.loadImage(PLAYER_RIGHT_PATH);
-        if (image_right == null) return false;
-
-        hero_front = Util.loadImage(PLAYER_HERO_FRONT);
-        if (hero_front == null) return false;
-
-        hero_left = Util.loadImage(PLAYER_HERO_LEFT);
-        if (hero_left == null) return false;
-
-        hero_right = Util.loadImage(PLAYER_HERO_RIGHT);
-        if (hero_right == null) return false;
-
         character = new Character(this);
         if (!character.load()) return false;
 
         playerTransform = new AffineTransform();
 
-        width = image_front.getWidth();
-        height = image_front.getHeight();
         yPos = game.world.currentMap.groundLevel - character.height / 2;
 
         return true;

@@ -54,47 +54,39 @@ public class Character {
     private static BufferedImage image_left;
     private static BufferedImage image_right;
 
-    private boolean drawMouth = false;
     private static BufferedImage mouth_front;
     private static BufferedImage mouth_left;
     private static BufferedImage mouth_right;
 
-    private boolean drawHat = false;
     public Color hat_color = Color.BLACK;
     private static BufferedImage hat_front;
     private static BufferedImage hat_left;
     private static BufferedImage hat_right;
 
-    private boolean drawHair = false;
     public Color hair_color = Color.BLACK;//new Color(110, 50, 0);
     private static BufferedImage hair_front;
     private static BufferedImage hair_left;
     private static BufferedImage hair_right;
 
-    private boolean drawEyebrows = false;
     public Color eyebrows_color = Color.BLACK;
     private static BufferedImage eyebrows_front;
     private static BufferedImage eyebrows_left;
     private static BufferedImage eyebrows_right;
 
-    private boolean drawAcc = false;
     private static BufferedImage acc_front;
     private static BufferedImage acc_left;
     private static BufferedImage acc_right;
 
-    private boolean drawShirt = false;
     public Color shirt_color = Color.BLACK;
     private static BufferedImage shirt_front;
     private static BufferedImage shirt_left;
     private static BufferedImage shirt_right;
 
-    private boolean drawPants = false;
     public Color pants_color = new Color(32, 154, 247);
     private static BufferedImage pants_front;
     private static BufferedImage pants_left;
     private static BufferedImage pants_right;
 
-    private boolean drawShoes = false;
     public Color shoe_color = Color.BLACK;
     private static BufferedImage shoes_front;
     private static BufferedImage shoes_left;
@@ -131,11 +123,11 @@ public class Character {
             now = System.nanoTime();
             time += now - lastTime;
             if (time >= ANIM_TIME) {
-                player.game.genParticles(player.xPos, player.yPos, 10.0, 60, 100);
-                if (player.heroMode)
+                if (!player.heroMode)
                     partCol = new Color(130, 2, 104);
                 else
                     partCol = Color.YELLOW;
+                player.game.genParticles(player.xPos, player.yPos, 10.0, 60, 100);
 
                 player.heroAnim = false;
                 time = 0;
@@ -398,11 +390,6 @@ public class Character {
             assets.put(imgName, img);
         }
 
-        //setHair(1, null);
-        //setShirt(1, null);
-        //setPants(1, null);
-        //setShoes(null);
-
         return true;
 
     }
@@ -418,6 +405,12 @@ public class Character {
                 //Front
                 image_front.getRaster().getPixel(x, y, rgba);
                 raster_f.setPixel(x, y, rgba);
+
+                if (mouth_front != null) {
+                    mouth_front.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_f.setPixel(x, y, rgba);
+                }
 
                 if (shirt_front != null) {
                     shirt_front.getRaster().getPixel(x, y, rgba);
@@ -453,6 +446,12 @@ public class Character {
                 image_left.getRaster().getPixel(x, y, rgba);
                 raster_l.setPixel(x, y, rgba);
 
+                if (mouth_left != null) {
+                    mouth_left.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_l.setPixel(x, y, rgba);
+                }
+
                 if (shirt_left != null) {
                     shirt_left.getRaster().getPixel(x, y, rgba);
                     if (rgba[3] > 100)
@@ -486,6 +485,12 @@ public class Character {
                 //Right
                 image_right.getRaster().getPixel(x, y, rgba);
                 raster_r.setPixel(x, y, rgba);
+
+                if (mouth_right != null) {
+                    mouth_right.getRaster().getPixel(x, y, rgba);
+                    if (rgba[3] > 100)
+                        raster_r.setPixel(x, y, rgba);
+                }
 
                 if (shirt_right != null) {
                     shirt_right.getRaster().getPixel(x, y, rgba);
@@ -537,8 +542,6 @@ public class Character {
 
         //TODO setHatColor
 
-        drawHat = true;
-
     }
 
     public void setHair(int style, Color color) {
@@ -552,8 +555,6 @@ public class Character {
 
         setHairColor();
 
-        drawHair = true;
-
     }
 
     public void setEyebros(int style, Color color) {
@@ -565,8 +566,6 @@ public class Character {
         eyebrows_left = assets.get(imgName + "_left");
         eyebrows_right = assets.get(imgName + "_right");
 
-        drawEyebrows = true;
-
     }
 
     public void setAcc(int style) {
@@ -576,8 +575,6 @@ public class Character {
         acc_left = assets.get(imgName + "_left");
         acc_right = assets.get(imgName + "_right");
 
-        drawAcc = true;
-
     }
 
     public void setMouth(int style) {
@@ -586,8 +583,6 @@ public class Character {
         mouth_front = assets.get(imgName + "_front");
         mouth_left = assets.get(imgName + "_left");
         mouth_right = assets.get(imgName + "_right");
-
-        drawMouth = true;
 
     }
 
@@ -602,8 +597,6 @@ public class Character {
 
         setShirtColor();
 
-        drawShirt = true;
-
     }
 
     public void setPants(int style, Color color) {
@@ -617,8 +610,6 @@ public class Character {
 
         setPantsColor();
 
-        drawPants = true;
-
     }
 
     public void setShoes(Color color) {
@@ -626,8 +617,6 @@ public class Character {
         if (color != null) shoe_color = color;
 
         setShoeColor();
-
-        drawShoes = true;
 
     }
 
