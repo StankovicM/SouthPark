@@ -63,7 +63,6 @@ public class CharacterSelection extends Menu {
     public void render(Graphics2D g) {
 
         g.drawImage(background,(int)pozX,(int)pozY,null);
-        update();
         g.drawImage(game.player.character.assets.get("char_front"), 600, 200, null);
         if (drawHair) g.drawImage(hair, 600, 200, null);
         if (drawMouth) g.drawImage(mouth, 600, 200, null);

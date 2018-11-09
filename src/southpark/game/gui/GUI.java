@@ -40,6 +40,19 @@ public class GUI {
 
     }
 
+    public void update() {
+
+        if (!game.running) {
+            if (!inCS)
+                mainMenu.update();
+            else
+                cs.update();
+        } else {
+            pauseMenu.update();
+        }
+
+    }
+
     public boolean load() {
 
         boolean ready;

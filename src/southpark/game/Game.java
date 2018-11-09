@@ -44,6 +44,10 @@ public class Game extends GameFrame {
     int distX;
     int distY;
 
+    private boolean transitionAnim = false;
+    private float position = 0.0f;
+    private float transSpeed = 0.02f;
+
     private Bullet[] bullets = new Bullet[MAX_BULLETS];
 
     public Game(String title, int sizeX, int sizeY) {
@@ -85,6 +89,7 @@ public class Game extends GameFrame {
             player.character.mergeChar();
             running = true;
             paused = false;
+            transitionAnim = true;
         } else {
             System.err.println("Game failed to start!");
         }
@@ -105,28 +110,44 @@ public class Game extends GameFrame {
 
         if (!paused) {
             if (running) {
-                g.drawImage(world.getCurrentImage(),0,0,null);
+                if (!transitionAnim) {
+                    g.drawImage(world.getCurrentImage(), 0, 0, null);
 
-                for (Bullet b : bullets) {
-                    if (!b.isAlive) continue;
+                    for (Bullet b : bullets) {
+                        if (!b.isAlive) continue;
 
-                    b.render(g);
-                }
+                        b.render(g);
+                    }
 
-                player.render(g);
+                    player.render(g);
 
-                bus.render();
+                    bus.render();
 
-                g.setColor(player.partCol);
-                for (Particle p : particles) {
-                    if (p.life <= 0) continue;
+                    g.setColor(player.partCol);
+                    for (Particle p : particles) {
+                        if (p.life <= 0) continue;
 
-                    p.render(g);
-                }
+                        p.render(g);
+                    }
 
-                if (drawCrosshair) {
-                    g.setColor(Color.YELLOW);
-                    g.drawImage(crosshair, crosshairX - crosshairSize / 2, crosshairY - crosshairSize / 2, null);
+                    if (drawCrosshair) {
+                        g.setColor(Color.YELLOW);
+                        g.drawImage(crosshair, crosshairX - crosshairSize / 2, crosshairY - crosshairSize / 2, null);
+                    }
+                } else {
+                    g.drawImage(gui.cs.getBackground(),
+                            (int)(0 - position * (APP_W)),
+                            (int)(position * APP_H * 0.25f),
+                            (int)(APP_W * (1.0f - position * 0.5f)),
+                            (int)(APP_H * (1.0f - position * 0.5f)),
+                            null);
+
+                    g.drawImage(world.getCurrentImage(),
+                            (int)(APP_W - position * (APP_W)),
+                            (int)((1.0f - position) * APP_H * 0.25f),
+                            (int)(APP_W * (0.5f + position * 0.5f)),
+                            (int)(APP_H * (0.5f + position * 0.5f)),
+                            null);
                 }
             }
         } else {
@@ -140,52 +161,61 @@ public class Game extends GameFrame {
 
         if (!paused) {
             if (running) {
-                distX = getMouseX() - 128;
-                distY = getMouseY() - 128;
+                if (!transitionAnim) {
+                    distX = getMouseX() - 128;
+                    distY = getMouseY() - 128;
 
-                player.facing = Player.Facing.NONE;
-                if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
-                    player.moveLeft();
-                }
-                if (isKeyDown(KeyEvent.VK_D) && !player.heroAnim) {
-                    player.moveRight();
-                }
+                    player.facing = Player.Facing.NONE;
+                    if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
+                        player.moveLeft();
+                    }
+                    if (isKeyDown(KeyEvent.VK_D) && !player.heroAnim) {
+                        player.moveRight();
+                    }
 
-                player.inFlight = false;
-                if (player.heroMode && !player.heroAnim && isKeyDown(KeyEvent.VK_F)) {
-                    player.inFlight = true;
-                    player.fly();
-                }
+                    player.inFlight = false;
+                    if (player.heroMode && !player.heroAnim && isKeyDown(KeyEvent.VK_F)) {
+                        player.inFlight = true;
+                        player.fly();
+                    }
 
-                if (!player.inJump && !player.inFlight)
-                    player.pullDown();
+                    if (!player.inJump && !player.inFlight)
+                        player.pullDown();
 
-                if (player.facing == Player.Facing.NONE) {
-                    player.angle = -Math.PI / 2.0;
-                    player.idle();
-                }
+                    if (player.facing == Player.Facing.NONE) {
+                        player.angle = -Math.PI / 2.0;
+                        player.idle();
+                    }
 
-                player.playerTransform.setToIdentity();
-                player.playerTransform.translate(player.xPos, player.yPos);
-                player.playerTransform.rotate(player.angle + Math.PI / 2.0);
-                player.playerTransform.translate(-player.character.width / 2, -player.character.height / 2);
+                    player.playerTransform.setToIdentity();
+                    player.playerTransform.translate(player.xPos, player.yPos);
+                    player.playerTransform.rotate(player.angle + Math.PI / 2.0);
+                    player.playerTransform.translate(-player.character.width / 2, -player.character.height / 2);
 
-                player.character.update();
+                    player.character.update();
 
-                for (Particle p : particles) {
-                    if (p.life <= 0) continue;
+                    for (Particle p : particles) {
+                        if (p.life <= 0) continue;
 
-                    p.update();
-                }
+                        p.update();
+                    }
 
-                for (Bullet b : bullets) {
-                    if (!b.isAlive) continue;
+                    for (Bullet b : bullets) {
+                        if (!b.isAlive) continue;
 
-                    b.update();
+                        b.update();
+                    }
+                } else {
+                    position += transSpeed;
+
+                    if(position >= 1.0f) {
+                        position = 1.0f;
+                        transitionAnim = false;
+                    }
                 }
             }
         } else {
-
+            gui.update();
         }
 
     }

@@ -28,6 +28,8 @@ public abstract class Menu {
 
     public abstract void render(Graphics2D g);
 
+    public abstract void update();
+
     public abstract boolean load();
 
     public boolean contains(Button btn) {

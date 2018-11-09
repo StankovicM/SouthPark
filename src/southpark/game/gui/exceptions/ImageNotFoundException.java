@@ -1,10 +1,10 @@
 package southpark.game.gui.exceptions;
 
-public class ButtonExistsException extends Exception {
+public class ImageNotFoundException extends Exception {
 
     private String text;
 
-    public ButtonExistsException(String text) {
+    public ImageNotFoundException(String text) {
 
         this.text = text;
 
