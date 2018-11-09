@@ -6,11 +6,13 @@ import southpark.game.Game;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 
 import static southpark.game.utils.Constants.*;
 
 public class Player {
 
+    public static final String WHIRL_PATH = "src/southpark/game/assets/whirl.png";
     public String PLAYER_FRONT_PATH = "src/southpark/game/assets/cartman_front.png";
     public String PLAYER_LEFT_PATH = "src/southpark/game/assets/cartman_left.png";
     public String PLAYER_RIGHT_PATH = "src/southpark/game/assets/cartman_right.png";
@@ -223,6 +225,7 @@ public class Player {
             falling = true;
             curSpeed = 1.0;
         }
+
     }
 
     public void fly() {

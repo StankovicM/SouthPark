@@ -5,10 +5,12 @@ import rafgfxlib.GameFrame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 
 import rafgfxlib.Util;
 import southpark.game.elements.GObject;
+import southpark.game.elements.particle.Bullet;
 import southpark.game.elements.particle.Particle;
 import southpark.game.elements.player.Player;
 import southpark.game.elements.vehicle.Bus;
@@ -37,6 +39,11 @@ public class Game extends GameFrame {
     public boolean running = false;
     public boolean drawCrosshair = false;
 
+    int distX;
+    int distY;
+
+    private Bullet[] bullets = new Bullet[MAX_BULLETS];
+
     public Game(String title, int sizeX, int sizeY) {
         super(title, sizeX, sizeY);
     }
@@ -61,6 +68,9 @@ public class Game extends GameFrame {
 
         for (int i = 0; i < MAX_PARTICLES; ++i)
             particles[i] = new Particle();
+
+        for (int i = 0; i < MAX_BULLETS; ++i)
+            bullets[i] = new Bullet(this);
 
         setUpdateRate(60);
         initGameWindow();
@@ -96,6 +106,12 @@ public class Game extends GameFrame {
             if (running) {
                 g.drawImage(world.getCurrentImage(), 0, 0, null);
 
+                for (Bullet b : bullets) {
+                    if (!b.isAlive) continue;
+
+                    b.render(g);
+                }
+
                 player.render(g);
 
                 bus.render();
@@ -123,6 +139,9 @@ public class Game extends GameFrame {
 
         if (!paused) {
             if (running) {
+                distX = getMouseX() - 128;
+                distY = getMouseY() - 128;
+
                 player.facing = Player.Facing.NONE;
                 if (isKeyDown(KeyEvent.VK_A) && !player.heroAnim) {
                     player.moveLeft();
@@ -160,6 +179,12 @@ public class Game extends GameFrame {
                     if (p.life <= 0) continue;
 
                     p.update();
+                }
+
+                for (Bullet b : bullets) {
+                    if (!b.isAlive) continue;
+
+                    b.update();
                 }
             }
         } else {
@@ -206,6 +231,19 @@ public class Game extends GameFrame {
         if (button == GFMouseButton.Left) {
             if (!running || paused) {
                 gui.notifyButtons();
+            } else {
+                if (player.heroMode && player.facing != Player.Facing.NONE) {
+                    for (Bullet b : bullets) {
+                        if (!b.isAlive) {
+                            b.xPos = player.xPos + player.character.width / 2;
+                            if (b.xPos > APP_W - 1) b.xPos = APP_W - 1;
+                            b.yPos = player.yPos;
+                            b.isAlive = true;
+                            b.dir = player.facing;
+                            break;
+                        }
+                    }
+                }
             }
         }
 

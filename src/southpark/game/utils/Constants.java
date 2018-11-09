@@ -12,5 +12,6 @@ public class Constants {
     public static final int APP_H = 720;
 
     public static final int MAX_PARTICLES = 100;
+    public static final int MAX_BULLETS = 20;
 
 }

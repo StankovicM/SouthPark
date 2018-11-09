@@ -53,69 +53,52 @@ public class Character {
     private static BufferedImage image_front;
     private static BufferedImage image_left;
     private static BufferedImage image_right;
-    private BufferedImage image;
 
     private boolean drawMouth = false;
     private static BufferedImage mouth_front;
     private static BufferedImage mouth_left;
     private static BufferedImage mouth_right;
-    private BufferedImage mouth;
-    private AffineTransform mouthTransform = new AffineTransform();
 
     private boolean drawHat = false;
     public Color hat_color = Color.BLACK;
     private static BufferedImage hat_front;
     private static BufferedImage hat_left;
     private static BufferedImage hat_right;
-    private BufferedImage hat;
-    private AffineTransform hatTransform = new AffineTransform();
 
     private boolean drawHair = false;
     public Color hair_color = Color.BLACK;//new Color(110, 50, 0);
     private static BufferedImage hair_front;
     private static BufferedImage hair_left;
     private static BufferedImage hair_right;
-    private BufferedImage hair;
-    private AffineTransform hairTransform = new AffineTransform();
 
     private boolean drawEyebrows = false;
     public Color eyebrows_color = Color.BLACK;
     private static BufferedImage eyebrows_front;
     private static BufferedImage eyebrows_left;
     private static BufferedImage eyebrows_right;
-    private BufferedImage eyebrows;
-    private AffineTransform eyebrowsTransform = new AffineTransform();
 
     private boolean drawAcc = false;
     private static BufferedImage acc_front;
     private static BufferedImage acc_left;
     private static BufferedImage acc_right;
-    private BufferedImage acc;
-    private AffineTransform accTransform = new AffineTransform();
 
     private boolean drawShirt = false;
     public Color shirt_color = Color.BLACK;
     private static BufferedImage shirt_front;
     private static BufferedImage shirt_left;
     private static BufferedImage shirt_right;
-    private BufferedImage shirt;
-    private AffineTransform shirtTransform = new AffineTransform();
 
     private boolean drawPants = false;
     public Color pants_color = new Color(32, 154, 247);
     private static BufferedImage pants_front;
     private static BufferedImage pants_left;
     private static BufferedImage pants_right;
-    private BufferedImage pants;
-    private AffineTransform pantsTransform = new AffineTransform();
 
     private boolean drawShoes = false;
     public Color shoe_color = Color.BLACK;
     private static BufferedImage shoes_front;
     private static BufferedImage shoes_left;
     private static BufferedImage shoes_right;
-    private BufferedImage shoes;
-    private AffineTransform shoeTransform = new AffineTransform();
 
     private static final int def_col[] = {160, 160, 160};
     private static final int def_shadow[] = {128, 128, 128};
@@ -223,36 +206,11 @@ public class Character {
     private void drawCharacter(Graphics2D g) {
 
         g.drawImage(character, player.playerTransform, null);
-        /*g.drawImage(image, player.playerTransform, null);
-        if (drawMouth) g.drawImage(mouth, mouthTransform, null);
-        if (drawAcc) g.drawImage(acc, accTransform, null);
-        if (drawHair) g.drawImage(hair, hairTransform, null);
-        if (drawEyebrows) g.drawImage(eyebrows, eyebrowsTransform, null);
-        if (drawHat) g.drawImage(hat, hatTransform, null);
-        if (drawShirt) g.drawImage(shirt, shirtTransform, null);
-        if (drawPants) g.drawImage(pants, pantsTransform, null);
-        if (drawShoes) g.drawImage(shoes, shoeTransform, null);*/
         if (drawHero) g.drawImage(hero, heroTransform, null);
 
     }
 
     public void update() {
-
-        /*hatTransform.setTransform(player.playerTransform);
-
-        mouthTransform.setTransform(player.playerTransform);
-
-        hairTransform.setTransform(player.playerTransform);
-
-        eyebrowsTransform.setTransform(player.playerTransform);
-
-        accTransform.setTransform(player.playerTransform);
-
-        shirtTransform.setTransform(player.playerTransform);
-
-        pantsTransform.setTransform(player.playerTransform);
-
-        shoeTransform.setTransform(player.playerTransform);*/
 
         heroTransform.setTransform(player.playerTransform);
 
@@ -261,15 +219,6 @@ public class Character {
     public void setFront() {
 
         character = char_front;
-        /*image = image_front;
-        hat = hat_front;
-        mouth = mouth_front;
-        hair = hair_front;
-        eyebrows = eyebrows_front;
-        acc = acc_front;
-        shirt = shirt_front;
-        pants = pants_front;
-        shoes = shoes_front;*/
         hero = hero_front;
 
     }
@@ -277,15 +226,6 @@ public class Character {
     public void setLeft() {
 
         character = char_left;
-        /*image = image_left;
-        hat = hat_left;
-        mouth = mouth_left;
-        hair = hair_left;
-        eyebrows = eyebrows_left;
-        acc = acc_left;
-        shirt = shirt_left;
-        pants = pants_left;
-        shoes = shoes_left;*/
         hero = hero_left;
 
     }
@@ -293,15 +233,6 @@ public class Character {
     public void setRight() {
 
         character = char_right;
-        /*image = image_right;
-        hat = hat_right;
-        mouth = mouth_right;
-        hair = hair_right;
-        eyebrows = eyebrows_right;
-        acc = acc_right;
-        shirt = shirt_right;
-        pants = pants_right;
-        shoes = shoes_right;*/
         hero = hero_right;
 
     }
