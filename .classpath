@@ -3,5 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/RAFGFXlib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/RAFGFXlib (2)"/>
 	<classpathentry kind="output" path="out/production/racunarskagrafika"/>
 </classpath>

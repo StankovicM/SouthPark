@@ -17,6 +17,8 @@ public abstract class Menu {
 
     protected Game game;
 
+
+
     public Menu(Game game, GUI parent) {
 
         this.game = game;
@@ -59,4 +61,7 @@ public abstract class Menu {
 
     public GUI getParent() { return parent; }
 
+    public BufferedImage getBackground() {
+        return background;
+    }
 }

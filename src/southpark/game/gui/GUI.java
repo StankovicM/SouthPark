@@ -15,7 +15,7 @@ public class GUI {
 
     private PauseMenu pauseMenu;
 
-    private CharacterSelection cs;
+    public CharacterSelection cs;
     private boolean inCS = false;
 
     public GUI(Game game) {

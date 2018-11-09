@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class CharacterSelection extends Menu {
 
+    private static final String CSBG_PATH = "src/southpark/game/assets/schoolRSZ.png";
+
     public int hair_ind = 0;
     public int mouth_ind = 0;
     public int shirt_ind = 0;
@@ -42,6 +44,12 @@ public class CharacterSelection extends Menu {
 
     public ArrayList<Color> colors = new ArrayList<>();
 
+    private boolean pomeranje=false;
+    private float speed = 1.0f;
+
+    private float pozX=-50;
+    private float pozY=0;
+
     public CharacterSelection(Game game, GUI gui) {
 
         super(game, gui);
@@ -57,6 +65,8 @@ public class CharacterSelection extends Menu {
 
     public void render(Graphics2D g) {
 
+        g.drawImage(background,(int)pozX,(int)pozY,null);
+        update();
         g.drawImage(game.player.character.assets.get("char_front"), 600, 200, null);
         if (drawHair) g.drawImage(hair, 600, 200, null);
         if (drawMouth) g.drawImage(mouth, 600, 200, null);
@@ -64,7 +74,7 @@ public class CharacterSelection extends Menu {
         if (drawPants) g.drawImage(pants, 600, 200, null);
         if (drawShoes) g.drawImage(shoes, 600, 200, null);
         
-        g.setColor(Color.WHITE);
+        g.setColor(Color.white);
         g.drawRect(780, 215, 30, 16);
         
         g.drawRect(780, 275, 30, 16);
@@ -91,6 +101,12 @@ public class CharacterSelection extends Menu {
     }
 
     public boolean load() {
+
+       // background=Util.loadImage(CSBG_PATH);
+        blur();
+        if(background==null)
+            return false;
+
 
         Button b;
         try {
@@ -367,6 +383,121 @@ public class CharacterSelection extends Menu {
         }
 
         return true;
+
+    }
+    private void blur(){
+        BufferedImage image = Util.loadImage(CSBG_PATH);
+
+        if(image == null) { System.out.println("Nema slike!"); return; }
+
+        WritableRaster source = image.getRaster();
+
+        WritableRaster temp = Util.createRaster(image.getWidth(), image.getHeight(), false);
+        WritableRaster target = Util.createRaster(image.getWidth(), image.getHeight(), false);
+
+        int rgb[] = new int[3];
+        float accum[] = new float[3];
+
+
+        int radius = 15;
+
+        int width = source.getWidth();
+        int height = source.getHeight();
+
+
+        float[] factors = new float[radius * 2 + 1];
+
+
+        float sum = 0.0f;
+
+
+
+        for(int i = 0; i < radius * 2 + 1; i++)
+        {
+            factors[i] = (float)Math.cos(((i - radius) / (double)(radius)) * (Math.PI / 2.0));
+            sum += factors[i];
+        }
+
+
+        for(int i = 0; i < radius * 2 + 1; i++)
+            factors[i] /= sum;
+
+
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+
+                accum[0] = 0.0f; accum[1] = 0.0f; accum[2] = 0.0f;
+
+                for(int X = -radius; X <= radius; X++)
+                {
+                    source.getPixel(Util.clamp(x + X, 0, width - 1), y, rgb);
+
+
+                    accum[0] += rgb[0] * factors[X + radius];
+                    accum[1] += rgb[1] * factors[X + radius];
+                    accum[2] += rgb[2] * factors[X + radius];
+                }
+
+
+                rgb[0] = (int)accum[0];
+                rgb[1] = (int)accum[1];
+                rgb[2] = (int)accum[2];
+
+
+                temp.setPixel(x, y, rgb);
+            }
+        }
+
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                accum[0] = 0.0f; accum[1] = 0.0f; accum[2] = 0.0f;
+
+                for(int Y = -radius; Y <= radius; Y++)
+                {
+
+                    temp.getPixel(x, Util.clamp(y + Y, 0, height - 1), rgb);
+
+                    accum[0] += rgb[0] * factors[Y + radius];
+                    accum[1] += rgb[1] * factors[Y + radius];
+                    accum[2] += rgb[2] * factors[Y + radius];
+                }
+
+                rgb[0] = (int)accum[0];
+                rgb[1] = (int)accum[1];
+                rgb[2] = (int)accum[2];
+
+
+                target.setPixel(x, y, rgb);
+            }
+        }
+        background=Util.rasterToImage(target);
+
+    }
+
+    public void update(){
+
+        if(!pomeranje){
+            if(pozX>=-80){
+                pozX-=0.5;
+            }
+            if(pozX==-80){
+                pomeranje=true;
+            }
+        }
+        if(pomeranje){
+            if(pozX<=0){
+                pozX+=0.5;
+            }
+            if(pozX==0){
+                pomeranje=false;
+            }
+        }
 
     }
 
